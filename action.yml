@@ -1,0 +1,5 @@
+name: 'Preflight Checklist'
+description: 'Checks things before they are deployed'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
