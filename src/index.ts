@@ -17,8 +17,8 @@ async function run(): Promise<void> {
       console.error(err);
     }
 
+    console.log('Files in this repository:\n');
     files.forEach(file => {
-      console.log('Files in this repository:');
       console.log(file);
     });
 

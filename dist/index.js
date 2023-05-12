@@ -31,8 +31,8 @@ function run() {
             if (err) {
                 console.error(err);
             }
+            console.log('Files in this repository:\n');
             files.forEach(file => {
-                console.log('Files in this repository:');
                 console.log(file);
             });
         });
