@@ -1,5 +1,10 @@
 name: 'Preflight Checklist'
 description: 'Checks things before they are deployed'
+inputs:
+  token:
+    description: 'GitHub token'
+    default: $
+    required: true
 runs:
   using: 'node16'
   main: 'dist/index.js'
