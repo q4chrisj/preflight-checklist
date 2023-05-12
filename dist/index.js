@@ -26,8 +26,8 @@ const fs_1 = __importDefault(__nccwpck_require__(747));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         let workspace = process.env.GITHUB_WORKSPACE || "";
-        console.log('Workspace' + workspace);
-        const workspace_files = fs_1.default.readdir(workspace, (err, files) => {
+        console.log('Workspace: ' + workspace);
+        fs_1.default.readdir(workspace, (err, files) => {
             if (err) {
                 console.error(err);
             }
