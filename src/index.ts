@@ -10,18 +10,19 @@ import path from 'path';
 async function run(): Promise<void> {
 
   let workspace: string = process.env.GITHUB_WORKSPACE || "";
-  console.log(workspace);
+  console.log('Workspace' + workspace);
   const workspace_files = fs.readdir(workspace, (err, files) => {
     if (err) {
       console.error(err);
     }
 
-    files.forEach(element => {
-      console.log(element);
+    files.forEach(file => {
+      console.log('Files in this repository:');
+      console.log(file);
     });
 
-
   });
+
 }
 
 run()
