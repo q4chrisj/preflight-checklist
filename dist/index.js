@@ -6,15 +6,6 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -26,17 +17,26 @@ const path_1 = __importDefault(__nccwpck_require__(622));
 // const token = core.getInput("token");
 // const octokit = github.getOctokit(token);
 // const repo = github.context.repo;
+let workspace = process.env.GITHUB_WORKSPACE || path_1.default.join(__dirname, "../");
 let repo_files = [];
-const excluded_dirs = ["node_modules", "dist", ".git"];
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        let workspace = process.env.GITHUB_WORKSPACE || path_1.default.join(__dirname, "../");
-        console.log('\nFiles in: %s\n', workspace);
-        repo_files = getAllFiles(workspace, []);
-        repo_files.forEach(file => {
-            console.log(file);
-        });
+let found_parameters = [];
+const excluded_dirs = ["node_modules", "dist", ".git", ".github"];
+async function run() {
+    repo_files = getAllFiles(workspace, []);
+    for (const file of repo_files) {
+        let file_contents = fs_1.default.readFileSync(file, 'utf8');
+        const pattern = /name\s+=\s+"\/\$\{[^}]+\}\/([^"]+)"/g;
+        found_parameters = found_parameters.concat(Array.from(file_contents.matchAll(pattern), (m) => m[1]));
+    }
+    console.log('\nSSM parameters found in: %s\n', workspace);
+    found_parameters.forEach(f => {
+        console.log(f);
     });
+    // now we have to
+    // 1. Figure out what the branch we are merging into is
+    // 2. Get the secrets for the branch we are merging into 
+    // 3. Connect to aws using the credentials from 2
+    // 4. Get all the SSM params and see if any are missing (based on what found_parameters contains)
 }
 const getAllFiles = function (dir, fileArray) {
     let entries = fs_1.default.readdirSync(dir);
