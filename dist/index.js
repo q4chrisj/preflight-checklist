@@ -19,25 +19,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+// import * as core from "@actions/core";
+// import * as github from "@actions/github";
 const fs_1 = __importDefault(__nccwpck_require__(747));
+const path_1 = __importDefault(__nccwpck_require__(622));
 // const token = core.getInput("token");
 // const octokit = github.getOctokit(token);
 // const repo = github.context.repo;
+let repo_files = [];
+const excluded_dirs = ["node_modules", "dist", ".git"];
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        let workspace = process.env.GITHUB_WORKSPACE || "";
-        console.log('Workspace: ' + workspace);
-        fs_1.default.readdir(workspace, (err, files) => {
-            if (err) {
-                console.error(err);
-            }
-            console.log('Files in this repository:\n');
-            files.forEach(file => {
-                console.log(file);
-            });
+        let workspace = process.env.GITHUB_WORKSPACE || path_1.default.join(__dirname, "../");
+        console.log('\nFiles in: %s\n', workspace);
+        repo_files = getAllFiles(workspace, []);
+        repo_files.forEach(file => {
+            console.log(file);
         });
     });
 }
+const getAllFiles = function (dir, fileArray) {
+    let entries = fs_1.default.readdirSync(dir);
+    fileArray = fileArray || [];
+    entries.forEach(entry => {
+        let is_exluded_dir = excluded_dirs.find(dir => dir == entry);
+        if (!is_exluded_dir) {
+            if (fs_1.default.statSync(path_1.default.join(dir, entry)).isDirectory()) {
+                fileArray = getAllFiles(path_1.default.join(dir, entry), fileArray);
+            }
+            else {
+                fileArray.push(path_1.default.join(dir, entry));
+            }
+        }
+    });
+    return fileArray;
+};
 run();
 
 
@@ -47,6 +63,13 @@ run();
 /***/ ((module) => {
 
 module.exports = require("fs");
+
+/***/ }),
+
+/***/ 622:
+/***/ ((module) => {
+
+module.exports = require("path");
 
 /***/ })
 
