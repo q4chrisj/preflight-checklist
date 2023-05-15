@@ -1,10 +1,10 @@
 {
-  "name": "preflighr-checklist",
+  "name": "preflight-checklist",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
   "engines": {
-    "node": "18.15.0"
+    "node": "16.17.1"
   },
   "keywords": [],
   "homepage": "",
