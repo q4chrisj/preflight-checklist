@@ -21,6 +21,9 @@ async function run(): Promise<void> {
     console.log(f);
   })
 
+  if (github.context.action) {
+    console.log("Running on github.com");
+  }
 
   // now we have to
   // 1. Figure out what the branch we are merging into is
