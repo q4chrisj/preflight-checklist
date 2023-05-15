@@ -101,7 +101,8 @@ async function run() {
         console.log("Token: %i", token);
         console.log("Target AWS Access Key: %i", target_awskey);
         console.log("Target AWS Secret Access Key: %i\n", target_awssecret);
-        console.log("Payload: %s\n", github.context.payload);
+        console.log("Payload: \n");
+        console.log(github.context.payload);
     }
     // now we have to
     // 1. Figure out what the branch we are merging into is
