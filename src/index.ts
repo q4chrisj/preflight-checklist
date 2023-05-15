@@ -25,8 +25,8 @@ async function run(): Promise<void> {
     console.log("Running on github.com\n");
 
     const token: string = core.getInput("token");
-    const target_awskey: string = core.getInput("target_aws_key_id");
-    const target_awssecret: string = core.getInput("target_aws_secret_access_key");
+    const target_awskey: string = core.getInput("target-aws-key-id");
+    const target_awssecret: string = core.getInput("target-aws-secret-access-key");
 
     console.log("Token: %i", token);
     console.log("Target AWS Access Key: %i", target_awskey);
