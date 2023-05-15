@@ -23,6 +23,7 @@ async function run(): Promise<void> {
   if (github.context.action) {
     console.log("Running on github.com\n");
     console.log('Process token: ' + process.env['INPUT_TOKEN']);
+    console.log('Process awskey: ' + process.env['TARGET-AWS-KEY-ID']);
     const token: string = core.getInput('token');
     const target_awskey: string = core.getInput('target-aws-key-id');
     const target_awssecret: string = core.getInput('target-aws-secret-access-key');
