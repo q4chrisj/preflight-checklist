@@ -34,7 +34,8 @@ async function run(): Promise<void> {
 
 
 
-    console.log("Payload: %s\n", github.context.payload);
+    console.log("Payload: \n");
+    console.log(github.context.payload);
   }
 
   // now we have to
