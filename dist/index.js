@@ -81,7 +81,6 @@ const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const path_1 = __importDefault(__nccwpck_require__(5622));
 const files_1 = __nccwpck_require__(2645);
-// const octokit = github.getOctokit(token);
 // const repo = github.context.repo;
 async function run() {
     let workspace = process.env.GITHUB_WORKSPACE || path_1.default.join(__dirname, "../");
@@ -98,6 +97,7 @@ async function run() {
         const token = core.getInput("token");
         const target_awskey = core.getInput("target-aws-key-id");
         const target_awssecret = core.getInput("target-aws-secret-access-key");
+        const octokit = github.getOctokit(token);
         console.log("Token: %i", token);
         console.log("Target AWS Access Key: %i", target_awskey);
         console.log("Target AWS Secret Access Key: %i\n", target_awssecret);

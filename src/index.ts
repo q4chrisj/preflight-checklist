@@ -3,7 +3,6 @@ import * as github from "@actions/github";
 import path from 'path';
 import { findMatchesInFiles, getAllFiles } from "./files";
 
-// const octokit = github.getOctokit(token);
 // const repo = github.context.repo;
 
 
@@ -27,6 +26,7 @@ async function run(): Promise<void> {
     const token: string = core.getInput("token");
     const target_awskey: string = core.getInput("target-aws-key-id");
     const target_awssecret: string = core.getInput("target-aws-secret-access-key");
+    const octokit = github.getOctokit(token);
 
     console.log("Token: %i", token);
     console.log("Target AWS Access Key: %i", target_awskey);
