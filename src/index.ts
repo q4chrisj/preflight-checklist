@@ -24,9 +24,10 @@ async function run(): Promise<void> {
   })
 
   if (github.context.action) {
-    console.log("Running on github.com\n\n");
+    console.log("Running on github.com\n");
 
-    console.log("Target AWS Access Key: %i\n", target_awskey);
+    console.log("Token: %i", token);
+    console.log("Target AWS Access Key: %i", target_awskey);
     console.log("Target AWS Secret Access Key: %i\n", target_awssecret);
 
 
