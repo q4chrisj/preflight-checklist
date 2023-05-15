@@ -3,17 +3,15 @@ import * as github from "@actions/github";
 import path from 'path';
 import { findMatchesInFiles, getAllFiles } from "./files";
 
-const token = core.getInput("token");
-const target_awskey = core.getInput("target_aws_key_id");
-const target_awssecret = core.getInput("target_aws_secret_access_key");
 // const octokit = github.getOctokit(token);
 // const repo = github.context.repo;
 
-let workspace: string = process.env.GITHUB_WORKSPACE || path.join(__dirname, "../");
-let repo_files: Array<string> = [];
-let found_parameters: Array<string> = [];
 
 async function run(): Promise<void> {
+
+  let workspace: string = process.env.GITHUB_WORKSPACE || path.join(__dirname, "../");
+  let repo_files: Array<string> = [];
+  let found_parameters: Array<string> = [];
 
   repo_files = getAllFiles(workspace, []);
   found_parameters = findMatchesInFiles(repo_files);
@@ -25,6 +23,10 @@ async function run(): Promise<void> {
 
   if (github.context.action) {
     console.log("Running on github.com\n");
+
+    const token: string = core.getInput("token");
+    const target_awskey: string = core.getInput("target_aws_key_id");
+    const target_awssecret: string = core.getInput("target_aws_secret_access_key");
 
     console.log("Token: %i", token);
     console.log("Target AWS Access Key: %i", target_awskey);

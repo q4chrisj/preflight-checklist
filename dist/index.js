@@ -81,15 +81,12 @@ const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const path_1 = __importDefault(__nccwpck_require__(5622));
 const files_1 = __nccwpck_require__(2645);
-const token = core.getInput("token");
-const target_awskey = core.getInput("target_aws_key_id");
-const target_awssecret = core.getInput("target_aws_secret_access_key");
 // const octokit = github.getOctokit(token);
 // const repo = github.context.repo;
-let workspace = process.env.GITHUB_WORKSPACE || path_1.default.join(__dirname, "../");
-let repo_files = [];
-let found_parameters = [];
 async function run() {
+    let workspace = process.env.GITHUB_WORKSPACE || path_1.default.join(__dirname, "../");
+    let repo_files = [];
+    let found_parameters = [];
     repo_files = (0, files_1.getAllFiles)(workspace, []);
     found_parameters = (0, files_1.findMatchesInFiles)(repo_files);
     console.log('\nSSM parameters found in: %s\n', workspace);
@@ -98,6 +95,9 @@ async function run() {
     });
     if (github.context.action) {
         console.log("Running on github.com\n");
+        const token = core.getInput("token");
+        const target_awskey = core.getInput("target_aws_key_id");
+        const target_awssecret = core.getInput("target_aws_secret_access_key");
         console.log("Token: %i", token);
         console.log("Target AWS Access Key: %i", target_awskey);
         console.log("Target AWS Secret Access Key: %i\n", target_awssecret);
