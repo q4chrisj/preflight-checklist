@@ -23,6 +23,8 @@ async function run(): Promise<void> {
 
   if (github.context.action) {
     console.log("Running on github.com");
+
+    console.log(github.context.payload);
   }
 
   // now we have to

@@ -96,6 +96,7 @@ async function run() {
     });
     if (github.context.action) {
         console.log("Running on github.com");
+        console.log(github.context.payload);
     }
     // now we have to
     // 1. Figure out what the branch we are merging into is
