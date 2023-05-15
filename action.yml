@@ -5,10 +5,10 @@ inputs:
     description: 'GitHub token'
     default: $
     required: true
-  target_aws_key_id:
+  target-aws-key-id:
     description: 'The target aws access key id'
     required: true
-  target_aws_secret_access_key:
+  target-aws-secret-access-key:
     description:  'The target aws secret access key'
     required: true
 runs:
