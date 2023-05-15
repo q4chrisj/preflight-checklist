@@ -3,7 +3,6 @@ description: 'Checks things before they are deployed'
 inputs:
   token:
     description: 'GitHub token'
-    default: $
     required: true
   target-aws-key-id:
     description: 'The target aws access key id'
