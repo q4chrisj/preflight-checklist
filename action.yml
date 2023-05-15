@@ -5,6 +5,12 @@ inputs:
     description: 'GitHub token'
     default: $
     required: true
+  target_aws_key_id:
+    description: 'The target aws access key id'
+    required: true
+  target_aws_secret_access_key:
+    description:  'The target aws secret access key'
+    required: true
 runs:
   using: 'node16'
   main: 'dist/index.js'

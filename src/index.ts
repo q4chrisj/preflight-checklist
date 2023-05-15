@@ -4,6 +4,8 @@ import path from 'path';
 import { findMatchesInFiles, getAllFiles } from "./files";
 
 const token = core.getInput("token");
+const target_awskey = core.getInput("target_aws_key_id");
+const target_awssecret = core.getInput("target_aws_secret_access_key");
 // const octokit = github.getOctokit(token);
 // const repo = github.context.repo;
 
@@ -22,11 +24,14 @@ async function run(): Promise<void> {
   })
 
   if (github.context.action) {
-    console.log("Running on github.com");
+    console.log("Running on github.com\n\n");
+
+    console.log("Target AWS Access Key: %i\n", target_awskey);
+    console.log("Target AWS Secret Access Key: %i\n", target_awssecret);
+
+
 
     console.log("Payload: %s\n", github.context.payload);
-
-    console.log("Repository: %s\n", github.context.repo);
   }
 
   // now we have to

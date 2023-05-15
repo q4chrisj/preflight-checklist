@@ -82,6 +82,8 @@ const github = __importStar(__nccwpck_require__(5438));
 const path_1 = __importDefault(__nccwpck_require__(5622));
 const files_1 = __nccwpck_require__(2645);
 const token = core.getInput("token");
+const target_awskey = core.getInput("target_aws_key_id");
+const target_awssecret = core.getInput("target_aws_secret_access_key");
 // const octokit = github.getOctokit(token);
 // const repo = github.context.repo;
 let workspace = process.env.GITHUB_WORKSPACE || path_1.default.join(__dirname, "../");
@@ -95,9 +97,10 @@ async function run() {
         console.log(f);
     });
     if (github.context.action) {
-        console.log("Running on github.com");
+        console.log("Running on github.com\n\n");
+        console.log("Target AWS Access Key: %i\n", target_awskey);
+        console.log("Target AWS Secret Access Key: %i\n", target_awssecret);
         console.log("Payload: %s\n", github.context.payload);
-        console.log("Repository: %s\n", github.context.repo);
     }
     // now we have to
     // 1. Figure out what the branch we are merging into is
