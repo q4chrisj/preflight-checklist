@@ -22,10 +22,10 @@ async function run(): Promise<void> {
 
   if (github.context.action) {
     console.log("Running on github.com\n");
-
-    const token: string = core.getInput("token");
-    const target_awskey: string = core.getInput("target-aws-key-id");
-    const target_awssecret: string = core.getInput("target-aws-secret-access-key");
+    console.log('Process token: ' + process.env['INPUT_TOKEN']);
+    const token: string = core.getInput('token');
+    const target_awskey: string = core.getInput('target-aws-key-id');
+    const target_awssecret: string = core.getInput('target-aws-secret-access-key');
     const octokit = github.getOctokit(token);
 
     console.log("Token: %i", token);
