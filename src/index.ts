@@ -1,48 +1,42 @@
-// import * as core from "@actions/core";
-// import * as github from "@actions/github";
 import { SSM } from "aws-sdk"
 import path from 'path';
 import { findMatchesInFiles, getAllFiles } from "./files";
+require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 
 async function run(): Promise<void> {
 
+  const param_search_path = "/dev/"
   let workspace: string = process.env.GITHUB_WORKSPACE || path.join(__dirname, "../");
-  let repo_files: Array<string> = [];
-  let found_parameters: Array<string> = [];
-
-  repo_files = getAllFiles(workspace, []);
-  found_parameters = findMatchesInFiles(repo_files);
+  let repo_files: Array<string> = getAllFiles(workspace, []);
+  let found_parameters: Array<string> = findMatchesInFiles(repo_files);
 
   console.log('\nSSM parameters found in: %s\n', workspace);
   found_parameters.forEach(f => {
-    console.log(f);
+    console.log("\t -%s", f);
   })
 
-  let aws_parameters = await getAllParameters();
+  let aws_parameters = await getAllParameters(param_search_path);
   let missing = found_parameters.filter(item => aws_parameters.indexOf(item) < 0);
-  // let missing = aws_parameters.filter(item => found_parameters.indexOf(item.replace) < 0);
 
-  console.log(missing);
+  console.log("\nThe following SSM parameters don't exist in the target AWS account.\n")
+  missing.forEach(item => {
+    console.warn("\t - %s", item);
+  });
 
-  // for (const param of aws_parameters) {
-  //   console.log(param);
-  // }
-
+  console.log("");
 }
 
-const getAllParameters = async (): Promise<Array<string>> => {
-
+const getAllParameters = async (searchPath: string): Promise<Array<string>> => {
   let parameters: Array<string> = [];
 
   const ssm = new SSM({ region: 'us-east-1' });
-  let result = await ssm.getParametersByPath({ Path: "/dev/", Recursive: true, MaxResults: 10 }).promise()
+  let result = await ssm.getParametersByPath({ Path: searchPath, Recursive: true, MaxResults: 10 }).promise()
 
   while (result.NextToken) {
     for (const param of result.Parameters!)
-      parameters.push(param.Name!.replace("/dev/", "") || "");
-    result = await ssm.getParametersByPath({ Path: "/dev/", Recursive: true, NextToken: result.NextToken, MaxResults: 10 }).promise()
+      parameters.push(param.Name!.replace(searchPath, ""));
+    result = await ssm.getParametersByPath({ Path: searchPath, Recursive: true, NextToken: result.NextToken, MaxResults: 10 }).promise()
   }
-
 
   return parameters;
 }
