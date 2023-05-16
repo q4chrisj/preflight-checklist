@@ -1,10 +1,8 @@
-import * as core from "@actions/core";
-import * as github from "@actions/github";
+// import * as core from "@actions/core";
+// import * as github from "@actions/github";
+import { SSM } from "aws-sdk"
 import path from 'path';
 import { findMatchesInFiles, getAllFiles } from "./files";
-
-// const repo = github.context.repo;
-
 
 async function run(): Promise<void> {
 
@@ -20,34 +18,33 @@ async function run(): Promise<void> {
     console.log(f);
   })
 
-  if (github.context.action) {
-    console.log("Running on github.com\n");
-    console.log('Process token: ' + process.env['INPUT_TOKEN']);
-    console.log('Process awskey: ' + process.env['TARGET-AWS-KEY-ID']);
-    const token: string = core.getInput('token');
-    const target_awskey: string = core.getInput('target-aws-key-id');
-    const target_awssecret: string = core.getInput('target-aws-secret-access-key');
-    const octokit = github.getOctokit(token);
+  let aws_parameters = await getAllParameters();
+  let missing = found_parameters.filter(item => aws_parameters.indexOf(item) < 0);
+  // let missing = aws_parameters.filter(item => found_parameters.indexOf(item.replace) < 0);
 
-    console.log("Token: %i", token);
-    console.log("Target AWS Access Key: %i", target_awskey);
-    console.log("Target AWS Secret Access Key: %i\n", target_awssecret);
+  console.log(missing);
 
-
-
-    console.log("Payload: \n");
-    console.log(github.context.payload);
-  }
-
-  // now we have to
-  // 1. Figure out what the branch we are merging into is
-  // 2. Get the secrets for the branch we are merging into 
-  // 3. Connect to aws using the credentials from 2
-  // 4. Get all the SSM params and see if any are missing (based on what found_parameters contains)
-  //
-
+  // for (const param of aws_parameters) {
+  //   console.log(param);
+  // }
 
 }
 
+const getAllParameters = async (): Promise<Array<string>> => {
+
+  let parameters: Array<string> = [];
+
+  const ssm = new SSM({ region: 'us-east-1' });
+  let result = await ssm.getParametersByPath({ Path: "/dev/", Recursive: true, MaxResults: 10 }).promise()
+
+  while (result.NextToken) {
+    for (const param of result.Parameters!)
+      parameters.push(param.Name!.replace("/dev/", "") || "");
+    result = await ssm.getParametersByPath({ Path: "/dev/", Recursive: true, NextToken: result.NextToken, MaxResults: 10 }).promise()
+  }
+
+
+  return parameters;
+}
 
 run()
