@@ -6,13 +6,14 @@ require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 async function run(): Promise<void> {
 
   const param_search_path = "/dev/"
+  const app_name = "platform-studio-eds"
   let workspace: string = process.env.GITHUB_WORKSPACE || path.join(__dirname, "../");
   let repo_files: Array<string> = getAllFiles(workspace, []);
-  let found_parameters: Array<string> = findMatchesInFiles(repo_files);
+  let found_parameters: Array<string> = findMatchesInFiles(repo_files, app_name);
 
   console.log('\nSSM parameters found in: %s\n', workspace);
   found_parameters.forEach(f => {
-    console.log("\t -%s", f);
+    console.log("\t - %s", f);
   })
 
   let aws_parameters = await getAllParameters(param_search_path);
@@ -33,9 +34,10 @@ const getAllParameters = async (searchPath: string): Promise<Array<string>> => {
   let result = await ssm.getParametersByPath({ Path: searchPath, Recursive: true, MaxResults: 10 }).promise()
 
   while (result.NextToken) {
-    for (const param of result.Parameters!)
+    for (const param of result.Parameters!) {
       parameters.push(param.Name!.replace(searchPath, ""));
-    result = await ssm.getParametersByPath({ Path: searchPath, Recursive: true, NextToken: result.NextToken, MaxResults: 10 }).promise()
+      result = await ssm.getParametersByPath({ Path: searchPath, Recursive: true, NextToken: result.NextToken, MaxResults: 10 }).promise()
+    }
   }
 
   return parameters;
