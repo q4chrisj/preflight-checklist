@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.findMatchesInFiles = exports.getAllFiles = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const regex_patterns_1 = require("./regex_patterns");
 const excluded_dirs = ["node_modules", "dist", ".git", ".github"];
 const getAllFiles = function (dir, fileArray) {
     let entries = fs_1.default.readdirSync(dir);
@@ -24,13 +25,31 @@ const getAllFiles = function (dir, fileArray) {
     return fileArray;
 };
 exports.getAllFiles = getAllFiles;
-const findMatchesInFiles = function (files) {
+const findMatchesInFiles = function (files, appName) {
     let found_parameters = [];
     for (const file of files) {
         let file_contents = fs_1.default.readFileSync(file, 'utf8');
-        const pattern = /name\s+=\s+"\/\$\{[^}]+\}\/([^"]+)"/g;
-        found_parameters = found_parameters.concat(Array.from(file_contents.matchAll(pattern), (m) => m[1]));
+        const file_contents_array = file_contents.split(/\r?\n/);
+        const pattern = regex_patterns_1.RegexPatterns.get("Terraform");
+        file_contents_array.forEach((line) => {
+            found_parameters = found_parameters.concat(Array.from(line.matchAll(pattern), (m) => m[1].startsWith("$") || m[1].indexOf("/") < 0 ? appName + "/" + m[1].substring(m[1].indexOf("/") + 1) : m[1]));
+        });
     }
-    return found_parameters;
+    return found_parameters = found_parameters.filter((item, index) => found_parameters.indexOf(item) === index); // remove duplicates
 };
 exports.findMatchesInFiles = findMatchesInFiles;
+// export const findMatchesInFiles = function(files: string[], appName: string) {
+//
+//   let found_parameters: Array<string> = [];
+//   for (const file of files) {
+//     let file_contents = fs.readFileSync(file, 'utf8');
+//
+//     const pattern: RegExp = /name\s+=\s+"\/\$\{[^}]+\}\/([^"]+)"/g
+//     found_parameters = found_parameters.concat(Array.from(file_contents.matchAll(pattern), (m) =>
+//
+//       m[1].startsWith("$") ? appName + "/" + m[1].substring(m[1].indexOf("/") + 1) : m[1])
+//     );
+//   }
+//
+//   return found_parameters = found_parameters.filter((item, index) => found_parameters.indexOf(item) === index); // remove duplicates
+// }

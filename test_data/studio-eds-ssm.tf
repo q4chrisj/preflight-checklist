@@ -37,13 +37,13 @@ data "aws_ssm_parameter" "studio_eds_eventbridge_arn" {
 }
 
 data "aws_ssm_parameter" "auth0_backend_client_id" {
-  count      = var.is_ephemeral ? 1 : 0
-  name       = "/${var.ssm_parameter_prefix_secure}/${var.app_name_prefix}/STUDIO_EDS_AUTH0_CLIENT_ID"
+  count = var.is_ephemeral ? 1 : 0
+  name  = "/${var.ssm_parameter_prefix_secure}/${var.app_name_prefix}/STUDIO_EDS_AUTH0_CLIENT_ID"
 }
 
 data "aws_ssm_parameter" "auth0_backend_client_secret" {
-  count      = var.is_ephemeral ? 1 : 0
-  name       = "/${var.ssm_parameter_prefix_secure}/${var.app_name_prefix}/STUDIO_EDS_AUTH0_CLIENT_SECRET"
+  count = var.is_ephemeral ? 1 : 0
+  name  = "/${var.ssm_parameter_prefix_secure}/${var.app_name_prefix}/STUDIO_EDS_AUTH0_CLIENT_SECRET"
 }
 
 data "aws_ssm_parameter" "platform_event_bridge_bus_arn" {
