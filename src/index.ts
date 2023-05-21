@@ -3,12 +3,6 @@ import path from 'path';
 import { findMatchesInFiles, getAllFiles } from "./files";
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 
-/*
- * For demo:
- * - Create an object that contains the app_name, path to the correspnding file
- * - Then loop through each set and call findMatchesInFiles with an array of one file (the one from above)
- * - Proceed as usual
- */
 async function run(): Promise<void> {
 
   // const app_name = "platform-studio-eds"
