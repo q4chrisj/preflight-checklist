@@ -43,19 +43,3 @@ export const findMatchesInFiles = function(files: string[], appName: string) {
 
   return found_parameters = found_parameters.filter((item, index) => found_parameters.indexOf(item) === index); // remove duplicates
 }
-
-// export const findMatchesInFiles = function(files: string[], appName: string) {
-//
-//   let found_parameters: Array<string> = [];
-//   for (const file of files) {
-//     let file_contents = fs.readFileSync(file, 'utf8');
-//
-//     const pattern: RegExp = /name\s+=\s+"\/\$\{[^}]+\}\/([^"]+)"/g
-//     found_parameters = found_parameters.concat(Array.from(file_contents.matchAll(pattern), (m) =>
-//
-//       m[1].startsWith("$") ? appName + "/" + m[1].substring(m[1].indexOf("/") + 1) : m[1])
-//     );
-//   }
-//
-//   return found_parameters = found_parameters.filter((item, index) => found_parameters.indexOf(item) === index); // remove duplicates
-// }
