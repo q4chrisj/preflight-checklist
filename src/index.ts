@@ -13,9 +13,9 @@ async function run(): Promise<void> {
 
   const param_search_path = "/dev/";
   const Tests: Map<string, string> = new Map();
-  Tests.set("platform-studio-eds", path.join(__dirname, "../test_data/studio-eds-ssm.tf"));
+  // Tests.set("platform-studio-eds", path.join(__dirname, "../test_data/studio-eds-ssm.tf"));
   // Tests.set("platform-shell", path.join(__dirname, "../test_data/platform-shell.tf"));
-  // Tests.set("platform-events-eds", path.join(__dirname, "../test_data/events-eds.tf"));
+  Tests.set("platform-events-eds", path.join(__dirname, "../test_data/events-eds.tf"));
 
   for (let [key, value] of Tests) {
     let found_parameters: Array<string> = findMatchesInFiles([value], key);
@@ -24,8 +24,8 @@ async function run(): Promise<void> {
       console.log("\t - %s", f);
     })
 
-    let aws_parameters = await getAllParameters(param_search_path);
-    let missing = found_parameters.filter(item => aws_parameters.indexOf(item) < 0);
+    const aws_parameters = await getAllParameters(param_search_path);
+    const missing = found_parameters.filter(item => aws_parameters.indexOf(item) < 0);
 
     console.log("\nThe following SSM parameters don't exist in the target AWS account.\n")
     missing.forEach(item => {
@@ -35,7 +35,6 @@ async function run(): Promise<void> {
     console.log("");
   }
 
-  return;
 }
 
 

@@ -78,15 +78,14 @@ async function run() {
         found_parameters.forEach(f => {
             console.log("\t - %s", f);
         });
-        let aws_parameters = await (0, parameters_1.getAllParameters)(param_search_path);
-        let missing = found_parameters.filter(item => aws_parameters.indexOf(item) < 0);
+        const aws_parameters = await (0, parameters_1.getAllParameters)(param_search_path);
+        const missing = found_parameters.filter(item => aws_parameters.indexOf(item) < 0);
         console.log("\nThe following SSM parameters don't exist in the target AWS account.\n");
         missing.forEach(item => {
             console.warn("\t - %s", item);
         });
         console.log("");
     }
-    return;
 }
 run();
 
